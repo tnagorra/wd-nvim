@@ -1,0 +1,7 @@
+:Wd	wd-nvim.txt	/*:Wd*
+:WdRefresh	wd-nvim.txt	/*:WdRefresh*
+g:wd_warprc	wd-nvim.txt	/*g:wd_warprc*
+wd-commands	wd-nvim.txt	/*wd-commands*
+wd-introduction	wd-nvim.txt	/*wd-introduction*
+wd-nvim.txt	wd-nvim.txt	/*wd-nvim.txt*
+wd-options	wd-nvim.txt	/*wd-options*
