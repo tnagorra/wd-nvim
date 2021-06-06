@@ -19,6 +19,10 @@ Plug 'tnagorra/wd-nvim'
 ## Usage
 
 ```vim
+" If currently in any directory inside warp-point, jump to the warp-point
+:Wd
+
+" Jump to a warp-point
 :Wd [warp-point]
 ```
 
@@ -32,7 +36,7 @@ Plug 'tnagorra/wd-nvim'
 ## Options
 
 ```vim
-# Set location of .warprc file
+" Set location of .warprc file
 let wd_warprc = '~/some/where/warp.rc'
 ```
 

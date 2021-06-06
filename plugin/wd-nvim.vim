@@ -14,6 +14,6 @@ local wd = require('wd-nvim')
 EOF
 
 command! -nargs=0 WdRefresh lua wd.load_warps()
-command! -nargs=1 -complete=customlist,v:lua.wd.warp_names Wd lua wd.warp(<f-args>)
+command! -nargs=? -complete=customlist,v:lua.wd.get_warp_names Wd lua wd.warp(<f-args>)
 
 let g:loaded_wd = 1
