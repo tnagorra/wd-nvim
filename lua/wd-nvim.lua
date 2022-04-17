@@ -2,34 +2,43 @@ local fn, cmd, g = vim.fn, vim.cmd, vim.g
 
 local wd = {}
 
+function wd.get_lines()
+    if wd.lines == nil then
+        local warp_location = g.wd_warprc or '$HOME/.warprc'
+        wd.lines = {}
+        for line in io.lines(fn.expand(warp_location)) do
+            local i = string.find(line, ':')
+            if i ~= nil then
+                local key = line:sub(1, i - 1)
+                local location = line:sub(i + 1)
+                wd.lines[key] = fn.expand(location)
+            end
+        end
+    end
+    return wd.lines
+end
+
 function wd.get_warp_names(start)
     return vim.tbl_filter(
         function(item) return vim.startswith(item, start) end,
-        vim.tbl_keys(wd.lines)
+        vim.tbl_keys(wd.get_lines())
     )
 end
 
 function wd.get_current_warp_name()
-    current_location = fn.getcwd()
-    for key, value in pairs(wd.lines) do
+    local current_location = fn.getcwd()
+    local candidates = {}
+    for _, value in pairs(wd.get_lines()) do
         if vim.startswith(current_location, value) then
-            return value
+            table.insert(candidates, value)
+            -- return value
         end
     end
-    return nil
-end
-
-function wd.load_warprc()
-    local warp_location = g.wd_warprc or '$HOME/.warprc'
-    wd.lines = {}
-    for line in io.lines(fn.expand(warp_location)) do
-        local i = string.find(line, ':')
-        if i ~= nil then
-            local key = line:sub(1, i - 1)
-            local location = line:sub(i + 1)
-            wd.lines[key] = fn.expand(location)
-        end
-    end
+    table.sort(
+        candidates,
+        function(foo, bar) return foo > bar end
+    )
+    return candidates[1]
 end
 
 function wd.warp(key)
@@ -43,7 +52,7 @@ function wd.warp(key)
         end
         return
     end
-    local location = wd.lines[key]
+    local location = wd.get_lines()[key]
     if location ~= nil then
         print("Warped to '" .. location .. "'")
         cmd('cd ' .. location)
@@ -53,6 +62,5 @@ function wd.warp(key)
 end
 
 _G.wd = wd;
-wd.load_warprc()
 
 return wd
